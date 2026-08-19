@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LedgerPilot — Invoicing & Client Management for Freelancers</title>
+<meta name="description" content="Create professional invoices, track clients and get paid faster. Free plan: 3 invoices/month. Pro: unlimited invoices, recurring billing, reports.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%234f46e5'/><text x='50' y='68' font-size='52' text-anchor='middle' fill='white' font-family='Arial'>L</text></svg>">
+<link rel="stylesheet" href="css/app.css">
+</head>
+<body>
+
+<!-- ===================== APP SHELL ===================== -->
+<div id="app" class="app hidden">
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-logo">L</div>
+      <div>
+        <div class="brand-name">LedgerPilot</div>
+        <div class="brand-plan" id="planBadge">Free plan</div>
+      </div>
+    </div>
+
+    <nav class="nav">
+      <button class="nav-item active" data-view="dashboard"><span class="ni">◧</span> Dashboard</button>
+      <button class="nav-item" data-view="invoices"><span class="ni">▤</span> Invoices</button>
+      <button class="nav-item" data-view="clients"><span class="ni">◉</span> Clients</button>
+      <button class="nav-item" data-view="expenses"><span class="ni">▽</span> Expenses</button>
+      <button class="nav-item" data-view="reports"><span class="ni">◫</span> Reports <span class="pro-tag">PRO</span></button>
+      <button class="nav-item" data-view="settings"><span class="ni">⚙</span> Settings</button>
+    </nav>
+
+    <div class="sidebar-bottom">
+      <div class="usage-card" id="usageCard">
+        <div class="usage-title">Monthly invoices</div>
+        <div class="usage-bar"><div class="usage-fill" id="usageFill"></div></div>
+        <div class="usage-text" id="usageText">0 / 3 used</div>
+        <button class="btn btn-upgrade" id="sidebarUpgrade">⚡ Upgrade to Pro</button>
+      </div>
+      <div class="user-row" id="userRow"></div>
+    </div>
+  </aside>
+
+  <main class="main">
+    <header class="topbar">
+      <h1 id="viewTitle">Dashboard</h1>
+      <div class="topbar-actions">
+        <button class="btn btn-ghost" id="btnDemoData" title="Load sample data">Load demo data</button>
+        <button class="btn btn-primary" id="btnNewInvoice">+ New Invoice</button>
+      </div>
+    </header>
+    <div class="view-container" id="viewContainer"></div>
+  </main>
+</div>
+
+<!-- ===================== ONBOARDING ===================== -->
+<div id="onboarding" class="onboarding">
+  <div class="ob-left">
+    <div class="ob-brand"><div class="brand-logo big">L</div> LedgerPilot</div>
+    <h1>Get paid faster.<br>Look professional doing it.</h1>
+    <p class="ob-sub">Invoicing, client management and income reports for freelancers and small studios — all in your browser, your data stays on your device.</p>
+    <ul class="ob-feats">
+      <li>✓ Professional PDF-ready invoices in 30 seconds</li>
+      <li>✓ Track overdue payments &amp; send reminders</li>
+      <li>✓ Income &amp; tax reports (Pro)</li>
+      <li>✓ Recurring invoices for retainers (Pro)</li>
+    </ul>
+    <div class="ob-social">Trusted by 12,400+ freelancers · ★★★★★ 4.8/5</div>
+  </div>
+  <div class="ob-right">
+    <div class="ob-card">
+      <h2>Set up your workspace</h2>
+      <p class="muted">Takes 20 seconds. No credit card required.</p>
+      <label>Your name / business name
+        <input id="obName" type="text" placeholder="e.g. Umut Sever Studio" maxlength="60">
+      </label>
+      <label>Email (shown on invoices)
+        <input id="obEmail" type="email" placeholder="you@studio.com" maxlength="80">
+      </label>
+      <label>Default currency
+        <select id="obCurrency">
+          <option value="USD">USD — US Dollar</option>
+          <option value="EUR">EUR — Euro</option>
+          <option value="GBP">GBP — British Pound</option>
+          <option value="TRY">TRY — Turkish Lira</option>
+        </select>
+      </label>
+      <button class="btn btn-primary btn-block" id="obStart">Start invoicing — Free</button>
+      <p class="ob-fine">Free plan includes 3 invoices/month, unlimited clients. Upgrade anytime.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== MODALS ===================== -->
+<div class="modal-backdrop hidden" id="modalBackdrop">
+  <div class="modal" id="modalBox"></div>
+</div>
+
+<!-- Invoice print frame -->
+<div id="printArea" class="print-area"></div>
+
+<div id="toastWrap" class="toast-wrap"></div>
+
+<script src="js/store.js"></script>
+<script src="js/billing.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
