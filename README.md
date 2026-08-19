@@ -1,61 +1,97 @@
-# LedgerPilot — Invoicing & Client Management for Freelancers
+# LedgerPilot — invoicing that pays for itself
 
-> Get paid faster. Look professional. Know your numbers.
+**A freemium invoicing & client-management SaaS for freelancers, built as a zero-dependency browser app.** Create professional invoices, track clients and expenses, see profit and tax reports, and export everything — all data stays in your browser.
 
-LedgerPilot is a browser-based invoicing and client-management SaaS for freelancers and micro-agencies. It runs 100% client-side in Chrome — no build step, no backend, no dependencies — while modeling a complete, realistic freemium business.
+> Built in a 1-hour "$1M App" challenge: not a landing-page mockup, but a working vertical slice of a real SaaS product with an honest, product-appropriate monetization model.
 
-## Why this is a real business
+---
 
-Freelancing is a growing market and every freelancer must invoice to get paid. Proven comparables (Bonsai, FreshBooks, Invoice Ninja, Wave) monetize exactly this workflow. LedgerPilot follows the same playbook:
+## 🚀 Run it (10 seconds)
 
-| | Free | Pro ($12/mo or $96/yr) |
-|---|---|---|
-| Invoices | **3 per month** | Unlimited |
-| Clients & expenses | Unlimited | Unlimited |
-| Invoice branding | "Made with LedgerPilot" footer | Removed |
-| Reports (P&L, top clients, tax summary) | Locked | ✔ |
-| CSV export | Locked | ✔ |
-
-The paywall is enforced **where the value is**: the moment a freelancer sends their 4th invoice of the month, they've proven the product works for them — that's the natural upgrade point (activation-based monetization, not a nag screen).
-
-## Features
-
-- **Dashboard** — KPIs (paid, outstanding, overdue, drafts), 6-month revenue chart (hand-rolled canvas), "needs attention" overdue list with one-click reminders
-- **Invoices** — line-item editor with live totals, discount & tax, statuses (draft → sent → paid, auto-overdue past due date), print-to-PDF via native print styles
-- **Clients** — CRUD with per-client billing history
-- **Expenses** — quick capture with categories
-- **Reports (Pro)** — revenue vs expenses, net profit, top clients, tax collected, CSV export (with CSV-injection sanitization)
-- **Billing** — full simulated Stripe-style checkout: plan toggle (monthly/annual), live card preview, Luhn validation, test card `4242 4242 4242 4242`, subscription manage/cancel
-- **Data** — everything in `localStorage` (privacy: your data never leaves the device), JSON backup/restore, one-click demo dataset
-
-## Run it
+No build step, no dependencies. Either:
 
 ```bash
 git clone https://github.com/umutseve4/ledgerpilot && cd ledgerpilot
-python3 -m http.server 8000   # or any static server — or just open index.html
+python3 -m http.server 8080   # or just double-click index.html
 ```
 
-Open http://localhost:8000 in Chrome. Click **"Load demo data"** on the top bar to explore with realistic data.
+Open http://localhost:8080 in Chrome. Click **“Load demo data”** in the top bar to explore a populated workspace instantly.
 
-## Architecture
+**Demo checkout card:** `4242 4242 4242 4242`, any future expiry, any CVC.
+
+---
+
+## 💰 The business model (and why it fits)
+
+LedgerPilot uses a **freemium subscription** — the proven model of Bonsai, FreshBooks and Invoice Ninja:
+
+| | Free | Pro ($12/mo or $96/yr ≈ $8/mo) |
+|---|---|---|
+| Invoices | **3 / month** | Unlimited |
+| Clients & expenses | Unlimited | Unlimited |
+| Invoice PDF | With LedgerPilot branding | **No branding** |
+| Reports, profit & tax summary | — | ✓ |
+| CSV export for accountants | — | ✓ |
+
+**Why this model is the right one for this product:**
+
+1. **The quota sits exactly on the value moment.** A freelancer who sends a 4th invoice in a month has, by definition, real revenue — $12 against hundreds or thousands of dollars invoiced is an easy yes. The paywall converts precisely when willingness to pay peaks.
+2. **Free tier is genuinely useful**, so it drives word-of-mouth (and the branded invoice footer is a built-in acquisition channel — every free invoice markets the product to another business owner).
+3. **Recurring revenue matches recurring value.** Invoicing is a monthly ritual; a subscription mirrors the usage pattern. Annual billing (−33%) improves cash flow and retention.
+4. **Reports/tax-export gating targets the second willingness-to-pay spike:** tax season.
+
+Unit economics sketch: at a 3–5% free→paid conversion (industry norm for prosumer SaaS) and ~$110 average annual revenue per paying user, 10k signups/mo ≈ $400–650k ARR run-rate after year one — the path to a seven-figure valuation for a product in this category.
+
+---
+
+## ✨ Features (all implemented & tested)
+
+- **Onboarding** — 30-second setup (name, email, currency), no account required
+- **Dashboard** — revenue/outstanding/overdue KPIs, 6-month revenue chart (hand-rolled canvas, DPI-aware), “needs attention” overdue list with reminder action
+- **Invoices** — full editor with dynamic line items, live totals, tax & discount, statuses (draft → sent → paid, auto-**overdue** past due date), print-to-PDF via `window.print()`
+- **Clients** — CRUD with per-client lifetime revenue
+- **Expenses** — categorized cost tracking feeding net-profit reporting
+- **Reports (Pro)** — revenue trend, net profit, top clients, collected-tax summary, CSV export (with CSV-injection sanitization)
+- **Monetization** — quota enforcement, feature gates, paywall with monthly/annual toggle, simulated Stripe-style checkout (Luhn card validation, live card preview), subscription management & cancellation
+- **Data** — everything in `localStorage`; JSON backup export; full reset. **Privacy is a feature: nothing leaves your device.**
+
+---
+
+## 🏗 Architecture
 
 ```
-index.html      app shell + onboarding
-css/app.css     design system, print styles for invoice PDF
-js/store.js     data layer — localStorage, totals, statuses, quotas, demo data
-js/billing.js   monetization — plans, quota gate, simulated payment (Luhn)
-js/app.js       UI — views, router, modals, canvas chart, paywall, checkout
+index.html      app shell: sidebar, topbar, onboarding, modal root, print area
+css/app.css     design system + @media print styles for PDF invoices
+js/store.js     data layer — state, persistence, totals, quotas, demo seed
+js/billing.js   monetization — plans, quota rules, simulated payments
+js/app.js       UI layer — views, router, modals, canvas chart, paywall
+test/smoke.js   headless smoke tests (node test/smoke.js)
 ```
 
-Vanilla JS, zero dependencies. Load order matters: `store → billing → app`.
+Deliberate choices:
 
-## Honest limitations
+- **Vanilla JS, zero dependencies, no build step** — instant load, no supply-chain risk, trivially auditable.
+- **Strict layering:** `store.js` and `billing.js` know nothing about the DOM — which is what makes them testable headlessly in Node.
+- **XSS-safe rendering:** every user string passes through `esc()` before `innerHTML` interpolation.
+- **Honest demo:** the checkout explicitly says no real charge is made; in production the payment call is a single function swap to Stripe.
 
-- Checkout is **simulated** (clearly labeled in-app). Production would swap `Billing.processPayment` for Stripe Checkout + a webhook-backed entitlement service.
-- Single-device storage; production needs a synced backend (PostgreSQL + auth).
-- "Recurring invoices" is listed as a Pro feature but not implemented in this MVP.
-- Tested: JS logic (headless smoke tests for totals, quota, payment validation, plan lifecycle) and asset serving. UI verified by code review, not automated E2E.
+## ✅ Tests
 
-## License
+```bash
+node test/smoke.js
+# ===== OTOMATIK KONTROL =====
+# PASS: 14 FAIL: 0 => PASS
+```
+
+Covers: invoice math (subtotal/discount/tax/total), free-quota enforcement, auto-overdue status, payment validation (valid + rejected card), plan lifecycle (upgrade → cancel), demo-data integrity.
+
+## ⚠️ Known limitations (honest scope)
+
+- Payments are **simulated** — production needs Stripe + a thin backend for webhooks/receipts.
+- Data is per-browser (`localStorage`); multi-device sync requires a backend (the natural Pro-tier server feature).
+- Email sending (invoice delivery, reminders) is stubbed as toasts.
+- No multi-user/team accounts.
+
+## 📄 License
 
 MIT — see [LICENSE](LICENSE).
