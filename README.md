@@ -1,5 +1,7 @@
 # LedgerPilot — invoicing that pays for itself
 
+[![CI](https://github.com/umutseve4/ledgerpilot/actions/workflows/ci.yml/badge.svg)](https://github.com/umutseve4/ledgerpilot/actions/workflows/ci.yml)
+
 **A freemium invoicing & client-management SaaS for freelancers, built as a zero-dependency browser app.** Create professional invoices, track clients and expenses, see profit and tax reports, and export everything — all data stays in your browser.
 
 > Built in a 1-hour "$1M App" challenge: not a landing-page mockup, but a working vertical slice of a real SaaS product with an honest, product-appropriate monetization model.
@@ -15,7 +17,7 @@ git clone https://github.com/umutseve4/ledgerpilot && cd ledgerpilot
 python3 -m http.server 8080   # or just double-click index.html
 ```
 
-Open http://localhost:8080 in Chrome. Click **“Load demo data”** in the top bar to explore a populated workspace instantly.
+Open http://localhost:8080 in Chrome. Click **"Load demo data"** in the top bar to explore a populated workspace instantly.
 
 **Demo checkout card:** `4242 4242 4242 4242`, any future expiry, any CVC.
 
@@ -47,7 +49,7 @@ Unit economics sketch: at a 3–5% free→paid conversion (industry norm for pro
 ## ✨ Features (all implemented & tested)
 
 - **Onboarding** — 30-second setup (name, email, currency), no account required
-- **Dashboard** — revenue/outstanding/overdue KPIs, 6-month revenue chart (hand-rolled canvas, DPI-aware), “needs attention” overdue list with reminder action
+- **Dashboard** — revenue/outstanding/overdue KPIs, 6-month revenue chart (hand-rolled canvas, DPI-aware), "needs attention" overdue list with reminder action
 - **Invoices** — full editor with dynamic line items, live totals, tax & discount, statuses (draft → sent → paid, auto-**overdue** past due date), print-to-PDF via `window.print()`
 - **Clients** — CRUD with per-client lifetime revenue
 - **Expenses** — categorized cost tracking feeding net-profit reporting
@@ -84,6 +86,8 @@ node test/smoke.js
 ```
 
 Covers: invoice math (subtotal/discount/tax/total), free-quota enforcement, auto-overdue status, payment validation (valid + rejected card), plan lifecycle (upgrade → cancel), demo-data integrity.
+
+Continuous integration: every push and PR runs the smoke suite on GitHub Actions (see badge above).
 
 ## ⚠️ Known limitations (honest scope)
 
