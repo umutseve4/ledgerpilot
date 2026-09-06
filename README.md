@@ -1,45 +1,34 @@
-# LedgerPilot — invoicing that pays for itself
+<h1 align="center">LedgerPilot</h1>
 
-[![CI](https://github.com/umutseve4/ledgerpilot/actions/workflows/ci.yml/badge.svg)](https://github.com/umutseve4/ledgerpilot/actions/workflows/ci.yml)
+<p align="center">
+  A freelancer invoicing app that opens by double-clicking a file.<br>
+  No build step, no package install, no account — invoices, clients, expenses,<br>
+  profit and tax reports, and a freemium paywall that gates the fourth invoice of the month.
+</p>
 
-**A freemium invoicing & client-management SaaS prototype for freelancers, built as a browser app with no npm package manifest or package-install step.** Create invoices, track clients and expenses, see profit and tax reports, and export data — application state stays in browser `localStorage`.
-
-> Built in a 1-hour "$1M App" challenge as a working vertical slice with an illustrative freemium model. It is a portfolio prototype, not a production billing service.
+<p align="center">
+  <a href="https://github.com/umutseve4/ledgerpilot/actions/workflows/ci.yml"><img src="https://github.com/umutseve4/ledgerpilot/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
+  <img src="https://img.shields.io/badge/headless%20assertions-14-FF4D4F?style=flat-square" alt="14 assertions">
+  <img src="https://img.shields.io/badge/npm%20packages-0-FF4D4F?style=flat-square" alt="0 npm packages">
+  <img src="https://img.shields.io/badge/setup%20time-10%20seconds-FF4D4F?style=flat-square" alt="10 seconds">
+</p>
 
 ---
 
-## 🚀 Run it (10 seconds)
-
-No build step or package install is required. Either:
+## Run it in 10 seconds
 
 ```bash
 git clone https://github.com/umutseve4/ledgerpilot && cd ledgerpilot
 python3 -m http.server 8080   # or just double-click index.html
 ```
 
-Open http://localhost:8080 in Chrome. Click **"Load demo data"** in the top bar to explore a populated workspace instantly.
+Open http://localhost:8080 in Chrome. Click **"Load demo data"** in the top bar to
+explore a populated workspace instantly.
 
-**Demo checkout card:** `4242 4242 4242 4242`, any future expiry, any CVC. The checkout is simulated and never makes a real charge.
+**Demo checkout card:** `4242 4242 4242 4242`, any future expiry, any CVC. The
+checkout is simulated and never makes a real charge.
 
----
-
-## 💰 Illustrative business model
-
-LedgerPilot demonstrates a **freemium subscription**:
-
-| | Free | Pro ($12/mo or $96/yr ≈ $8/mo) |
-|---|---|---|
-| Invoices | **3 / month** | Unlimited |
-| Clients & expenses | Unlimited | Unlimited |
-| Invoice PDF | With LedgerPilot branding | **No branding** |
-| Reports, profit & tax summary | — | ✓ |
-| CSV export for accountants | — | ✓ |
-
-The product logic places the quota at the fourth monthly invoice and gates reports/tax export behind the simulated Pro tier. Pricing, conversion, retention, and valuation have not been validated with real customers; the figures above are product assumptions for the prototype.
-
----
-
-## ✨ Implemented features
+## What you get
 
 - **Onboarding** — local setup (name, email, currency), no account required
 - **Dashboard** — revenue/outstanding/overdue KPIs, 6-month revenue chart, and an overdue list with reminder action
@@ -50,9 +39,22 @@ The product logic places the quota at the fourth monthly invoice and gates repor
 - **Monetization demo** — quota enforcement, feature gates, paywall, monthly/annual toggle, simulated checkout with Luhn validation, and local subscription cancellation
 - **Data** — `localStorage`, JSON backup export, and full reset
 
----
+## The illustrative business model
 
-## 🏗 Architecture
+| | Free | Pro ($12/mo or $96/yr ≈ $8/mo) |
+|---|---|---|
+| Invoices | **3 / month** | Unlimited |
+| Clients & expenses | Unlimited | Unlimited |
+| Invoice PDF | With LedgerPilot branding | **No branding** |
+| Reports, profit & tax summary | — | ✓ |
+| CSV export for accountants | — | ✓ |
+
+The product logic places the quota at the fourth monthly invoice and gates
+reports/tax export behind the simulated Pro tier. Pricing, conversion, retention,
+and valuation have **not** been validated with real customers; the figures above
+are product assumptions for the prototype.
+
+## Architecture
 
 ```
 index.html      app shell: sidebar, topbar, onboarding, modal root, print area
@@ -70,21 +72,24 @@ Deliberate choices:
 - **Rendering:** user strings are routed through the app's `esc()` helper before the documented `innerHTML` interpolation paths.
 - **Honest demo:** the checkout says no real charge is made. A production payment integration would also require a backend, secure secrets handling, webhooks, receipts, authentication, authorization, monitoring, and operational controls.
 
-## ✅ Automated validation
-
 ```bash
 node test/smoke.js
 # ===== OTOMATIK KONTROL =====
 # PASS: 14 FAIL: 0 => PASS
 ```
 
-The current smoke source contains **14 headless assertions** covering store and billing behavior: invoice math, free-quota enforcement, auto-overdue status, simulated payment validation, local plan lifecycle, and demo-data integrity.
+The current smoke source contains **14 headless assertions** covering store and
+billing behavior: invoice math, free-quota enforcement, auto-overdue status,
+simulated payment validation, local plan lifecycle, and demo-data integrity.
+GitHub Actions runs this suite on pushes to `main`, pull requests, and manual
+dispatch with Node.js `20`.
 
-GitHub Actions runs this suite on pushes to `main`, pull requests, and manual dispatch with Node.js `20`.
+## Limits
 
-**Validation boundary:** these checks execute `js/store.js` and `js/billing.js` in a Node VM without a DOM. They do not prove browser rendering, accessibility, end-to-end UI behavior, real PDF output, real email delivery, payment processing, backend security, multi-user isolation, or production readiness.
-
-## ⚠️ Known limitations
+**Validation boundary:** these checks execute `js/store.js` and `js/billing.js` in a
+Node VM without a DOM. They do not prove browser rendering, accessibility,
+end-to-end UI behavior, real PDF output, real email delivery, payment processing,
+backend security, multi-user isolation, or production readiness.
 
 - Payments are **simulated**; there is no Stripe integration or real payment backend.
 - Data is per-browser (`localStorage`); there is no server-side persistence or multi-device sync.
@@ -92,6 +97,10 @@ GitHub Actions runs this suite on pushes to `main`, pull requests, and manual di
 - There are no multi-user/team accounts, authentication, authorization, audit logs, or production monitoring.
 - Browser/GPU/UI behavior requires separate end-to-end and manual validation.
 
-## 📄 License
+Built in a 1-hour "$1M App" challenge as a working vertical slice with an
+illustrative freemium model. It is a portfolio prototype, not a production billing
+service.
+
+---
 
 MIT — see [LICENSE](LICENSE).
